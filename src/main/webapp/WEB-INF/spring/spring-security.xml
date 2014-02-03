@@ -1,0 +1,30 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<http auto-config="true">
+		 <access-denied-handler error-page="/login"/>
+		<intercept-url pattern="/index/*" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/monitor/*" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/tunerconfig/*" access="ROLE_USER, ROLE_ADMIN" />
+		<intercept-url pattern="/config/*" access="ROLE_ADMIN" />
+		<form-login login-page="/login" default-target-url="/index"
+			authentication-failure-url="/loginfailed" />
+		<logout logout-success-url="/logout" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="kong" password="123456" authorities="ROLE_USER" />
+				<user name="admin" password="123456" authorities="ROLE_ADMIN" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
+
+  

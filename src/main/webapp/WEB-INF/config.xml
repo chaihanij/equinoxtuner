@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="tis-620"?>
+<configuration>
+	<SystemPath>
+		<ConfigPath value="/opt/equinox/conf" />
+	</SystemPath>
+	<ActiveElement>
+		<Type XPath="//configulation/warm">
+			<SFLOG attributeName="value" max="" min="" unit="" description="test" />
+			<StatInterval attributeName="value" max="100" min="0"
+				unit=""
+				description="This statistics will display about value of StatInterval in warm configuration." />
+			<HousekeeperInterval attributeName="value" max="100"
+				min="0" unit=""
+				description="This statistics will display about value of HousekeeperInterval in warm configuration." />
+			<SFSentMessageCount attributeName="value" max="100"
+				min="0" unit=""
+				description="This statistics will be incremented when E03 send equinox message to E00." />
+			<SFSendQueueCount attributeName="value" max="100"
+				min="0" unit=""
+				description="This statistics will display about the number of equinox message which store in SF sending queue." />
+			<SFConnectTimeout attributeName="value" max="100"
+				min="0" unit="." description="test" />
+			<SFReadTimeout attributeName="value" max="100" min="0"
+				unit="." description="test" />
+			<SFWriteTimeout attributeName="value" max="100" min="0"
+				unit="." description="test" />
+		</Type>
+	</ActiveElement>
+	<NodeConnection>
+		<Node nodeName="TJ" ip="10.252.192.15" user="root" pass="$And@ais;" />
+		<Node nodeName="OCF" ip="10.252.192.15" user="root" pass="$And@ais;" />
+		<Node nodeName="AF" ip="10.252.192.35" user="toro" pass="toro" />
+		<Node nodeName="smf" ip="10.252.192.15" user="toro" pass="toro" />
+	</NodeConnection>
+	<StateEquinox>
+		<ConfigPath value="/opt/equinox/stat" />
+		<Interval value="15" />
+		<StateType>
+			<SystemInternalStatus>
+				<FMONProcessID />
+				<FMONUpSince />
+				<MainProcessID />
+			</SystemInternalStatus>
+			<SystemMeasurement>
+				<SessionCount />
+				<HttpRecvMessageCount />
+				<HttpSentMessageCount />
+				<HttpAvgResponseTime />
+			</SystemMeasurement>
+			<AccumulatingCounters>
+				<SFRecvMessageCount />
+				<SFClientCount />
+				<SFSendQueueCount />
+				<HttpMaxResponseTime />
+			</AccumulatingCounters>
+		</StateType>
+	</StateEquinox>
+</configuration>
