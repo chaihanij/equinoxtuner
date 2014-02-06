@@ -7,8 +7,7 @@
 				<option value="">Please Select Node</option>
 			</select>
 		</div>
-		
-		<h5>Statistics List</h5>
+		<h6>Statistics List</h6>
 		<div ng-show="visbleStatistics">
 			<div >
 				<input id="textSreach" type="text" class="form-control"
@@ -26,23 +25,41 @@
 		</div>
 	</div>
 	<div class="col-md-8">
-		<table>
+		<table class="col-md-12">
 			<tr>
-				<td><h5>Connect Node</h5></td>
-				<td align="center"><h5>{{systemGroupModel.value}}</h5></td>
+				<td colspan="1" width="20%"><h6>ConnectNode</h6></td>
+				<td colspan="3" align="center"><h6>{{systemGroupModel.value}}</h6></td>
+				
 			</tr>
 			<tr>
-				<td><h5>Application</h5></td>
-				<td align="center"><h5>{{systemGroupModel.text}}</h5></td>
+				<td colspan="1" width="20%"><h6>Application</h6></td>
+				<td colspan="3" align="center"><h6>{{systemGroupModel.text}}</h6></td>
 			</tr>
 			<tr>
-				<td><h5>Statistics File</h5></td>
-				<td align="center"><h5>{{statemonitor.text}}</h5></td>
+				<td colspan="1"  width="20%"><h6>StatisticsFile</h6></td>
+				<td colspan="3"  width="30%" align="center"><h6>{{statemonitor.text}}</h6></td>
+			</tr>
+		</table>
+		<hr>
+		<br>
+		<table class="col-md-12">
+			<tr ng-show="visibleCharts">
+				<td width="20%"><h6>TimeBegin</h6></td>
+				<td width="60%" align="center">
+					<div class="input-group date">
+						<input type='text' class="form-control" ng-model="timebegin"/>
+					 	<span class="input-group-addon">
+				 		<span class="glyphicon glyphicon-time"></span>
+					 	</span>
+					</div>
+				</td>
+				<td align="center" width="20%">
+					<button type="button" class="btn btn-primary" ng-click="timeChange(timebegin)">OK</button>
+				</td>
 			</tr>
 		</table>
 		
-		<div ng-show="visibleCharts">
-		
+		<div ng-show="visibleCharts" style="margin-top: 5px">
 			<div style="margin-top: 5px">
 				<accordion>
 					<accordion-group is-open="true">
@@ -52,15 +69,15 @@
 							</span>
 						</accordion-heading>
 						<div class="bs-docs-example">
-							<div class="demo-container">
-								<table class="table">
+							<div class="demo-container" align="center">
+								<table width="80%">
 									<tr>
-										<th><h5>Statistics</h5></th>
-										<th><h5>Value</h5></th>
+										<th><h6>Statistics</h6></th>
+										<th><h6>Value</h6></th>
 									</tr>
 									<tr ng-repeat="object in dbSystem">
-										<td ng-repeat="(key, value) in object">{{key}}</td>
-										<td ng-repeat="(key, value) in object">{{value}}</td>
+										<td ng-repeat="(key, value) in object"><h6>{{key}}</h6></td>
+										<td ng-repeat="(key, value) in object"><h6>{{value}}</h6></td>
 									</tr>
 								</table>
 							</div>		
@@ -68,12 +85,13 @@
 					</accordion-group>
 				 </accordion>
 			 </div>
-			 <div style="margin-top: 5px">
+	
+			  <div style="margin-top: 5px">
 				 <accordion >
 					<accordion-group is-open="true">
 						<accordion-heading>
 							<span style="color: black;">
-								System Measurement 
+								System Measurement
 							</span>
 						</accordion-heading>
 						<div class="bs-docs-example">
@@ -109,7 +127,7 @@
 							</span>
 						</accordion-heading>
 						<div class="bs-docs-example">
-							<div id="accumulating">
+							<div id="accumulating" align="center">
 								<svg></svg>
 							</div>
 						</div>

@@ -20,17 +20,17 @@
 					Search
 				</label>
 			</div>
-			<div class="row" ng-show="modelVisibleInput">
-				<div class="col-md-3">
+			<div class="row" ng-show="modelVisibleInput" align="center">
+				<div class="col-md-3" align="center">
 					<input type="text" class="form-control" ng-model="search.app">
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3" align="center">
 					<input type="text" class="form-control" ng-model="search.service">
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3" align="center">
 					<input type="text" class="form-control" ng-model="search.site">
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3" align="center">
 					<input type="text" class="form-control" ng-model="search.node">
 				</div>
 			</div>
@@ -48,75 +48,87 @@
 
 	</div>
 	<div class="col-md-8">
-		<table>
+		<table width="100%">
 			<tr>
-				<td><h5>Connect Node</h5></td>
-				<td align="center"><h5>{{systemGroupModel.value}}</h5></td>
+				<td width="20%"><h5>Connect Node</h5></td>
+				<td width="30%" align="center"><h5>{{systemGroupModel.value}}</h5></td>
+				<td width="20%"><h5>Application</h5></td>
+				<td width="30%" align="center"><h5>{{systemGroupModel.text}}</h5></td>
 			</tr>
 			<tr>
-				<td><h5>Application</h5></td>
-				<td align="center"><h5>{{systemGroupModel.text}}</h5></td>
+				<td width="20%"><h5>Configuration File</h5></td>
+				<td width="30%" align="center"><h5>{{configName.text}}</h5></td>
+				<td></td>
+				<td></td>
 			</tr>
-			<tr>
-				<td><h5>Configuration File</h5></td>
-				<td align="center"><h5>{{configName.text}}</h5></td>
-			</tr>
+		
 		</table>
 		<hr>
 		<div ng-show="visbleConfiguration">
 
-			<accordion ng-show="visbleAccordionSFLOG"> <accordion-group>
-			<accordion-heading> <span>SFLOG = <span
-				style="color: red;">{{strSFLOG}}</span></span> </accordion-heading>
-			<div class="bs-docs-example">
-				<table class="table table-striped">
-					<tr>
-						<td ng-repeat="SFLOG in SFLOGCheckbox"><label
-							class="checkbox"> <input id="FATAL" type="checkbox"
-								ng-model="SFLOG.checked" ng-checked="SFLOG.checked"
-								ng-change="valueSFLOG()" /> <span>{{SFLOG.name}}</span>
-						</label></td>
-					</tr>
-				</table>
-			</div>
-			</accordion-group> </accordion>
-			<div style="margin-top: 5px" ng-show="visbleAccordionWram"
-				ng-repeat="slider in configurationWram">
-				<accordion> <accordion-group> <accordion-heading>
-				<span>{{slider.text}} = <span style="color: red;">{{slider.value}}</span>{{slider.unit}}
-				</span> </accordion-heading>
-				<div class="bs-docs-example">
-					<table class="table table-striped">
-						<tr>
-							<td align="center">min</td>
-							<td style="width: 100%" colspan="4"></td>
-							<td class="text-center">max</td>
-						</tr>
-						<tr>
-							<td align="center">{{slider.min}}</td>
-							<td style="width: 100%" colspan="4">
-								<div class="slider2" ui-slider min="slider.min" max="slider.max"
-									ng-model="slider.value"></div>
-							</td>
-							<td class="text-center">{{slider.max}}</td>
-						</tr>
-						<tr>
-							<td>Value</td>
-							<td style="width: 100%;" colspan="4"><input
-								class="form-control" name="input" type="text"
-								ng-model="slider.value" max="slider.max" min="slider.min"
-								onkeypress="return isNumberKey(event);"
-								placeholder="{{slider.value}}" integer required></td>
-							<td><a ng-click="isCollapsed = !isCollapsed">description</a></td>
-						</tr>
-					</table>
-					<div collapse="!isCollapsed">
-						<div class="well well-large">
-							<p>{{slider.description}}</p>
-						</div>
+			<accordion ng-show="visbleAccordionSFLOG">
+				<accordion-group>
+					<accordion-heading> 
+						<span>
+							SFLOG = 
+							<span style="color: red;">{{strSFLOG}}</span>
+						</span> 
+					</accordion-heading>
+					<div class="bs-docs-example">
+						<table class="table table-striped">
+							<tr ng-repeat="SFLOG in SFLOGCheckbox">
+								<td><label class="checkbox">
+									<input id="FATAL" type="checkbox" ng-model="SFLOG.checked" ng-checked="SFLOG.checked" ng-change="valueSFLOG()" /> 
+										<span>{{SFLOG.name}}</span>
+									</label>
+								</td>
+							</tr>
+						</table>
 					</div>
-				</div>
-				</accordion-group> </accordion>
+				</accordion-group>
+			</accordion>
+			<div style="margin-top: 5px" ng-show="visbleAccordionWram" ng-repeat="slider in configurationWram">
+				<accordion> 
+					<accordion-group>
+						<accordion-heading>
+							<span>{{slider.text}} = 
+								<span style="color: red;">{{slider.value}}</span>
+								&nbsp;&nbsp;&nbsp;&nbsp;{{slider.unit}}
+							</span> 
+						</accordion-heading>
+						<div class="bs-docs-example">
+							<table class="table table-striped">
+								<tr>
+									<td align="center">min</td>
+									<td style="width: 100%" colspan="4"></td>
+									<td class="text-center">max</td>
+								</tr>
+								<tr>
+									<td align="center">{{slider.min}}</td>
+									<td style="width: 100%" colspan="4">
+										<div class="slider2" ui-slider min="slider.min" max="slider.max"
+											ng-model="slider.value"></div>
+									</td>
+									<td class="text-center">{{slider.max}}</td>
+								</tr>
+								<tr>
+									<td>Value</td>
+									<td style="width: 100%;" colspan="4"><input
+										class="form-control" name="input" type="text"
+										ng-model="slider.value" max="slider.max" min="slider.min"
+										onkeypress="return isNumberKey(event);"
+										placeholder="{{slider.value}}" integer required></td>
+									<td><a ng-click="isCollapsed = !isCollapsed">description</a></td>
+								</tr>
+							</table>
+							<div collapse="!isCollapsed">
+								<div class="well well-large">
+									<p>{{slider.description}}</p>
+								</div>
+							</div>
+						</div>
+					</accordion-group> 
+				</accordion>
 			</div>
 
 			<div class="row" style="margin-top: 5px" align="center">
