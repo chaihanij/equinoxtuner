@@ -48,9 +48,16 @@
 				<td width="60%" align="center">
 					<div class="input-group date">
 						<input type='text' class="form-control" ng-model="timebegin"/>
-					 	<span class="input-group-addon">
-				 		<span class="glyphicon glyphicon-time"></span>
-					 	</span>
+					 	<span class="input-group-addon dropdown-toggle">
+				 			<span class="glyphicon glyphicon-time "></span>
+						 </span>
+						 <ul class="dropdown-menu">
+						 		 <li>
+						 	 		<div ng-model="timebeginmillisec" ng-change="changedTimebegin(timebeginmillisec)"style="display:inline-block;">
+	        							<timepicker hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+	  								</div>
+	  							</li>
+						</ul>
 					</div>
 				</td>
 				<td align="center" width="20%">

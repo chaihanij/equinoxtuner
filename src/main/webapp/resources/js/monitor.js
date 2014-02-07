@@ -85,7 +85,7 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 	var timedefault = 180 * 1000;
 
 	$scope.timebegin;
-
+	$scope.timebeginmillisec;
 	var testdata = [ {
 		"time" : "2014-02-05 14:28:00",
 		"internalstat" : [ {
@@ -395,8 +395,12 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 		var milliseconds = new Date().getTime();
 		var timecal = new Date((milliseconds - timedefault));
 		var timebegin = [ timecal.getHours().padLeft(),
-				timecal.getMinutes().padLeft(), timecal.getSeconds().padLeft() ]
-				.join(':');
+				timecal.getMinutes().padLeft(), "00" ].join(':');
+
+		var datetime = (Date.UTC(0, 0, 0, timecal.getHours(), timecal
+				.getMinutes(), timecal.getSeconds()) - (7 * 3600 * 1000));
+
+		$scope.timebeginmillisec = datetime;
 		$scope.timebegin = timebegin;
 		$scope.statemonitor = statemonitor;
 
@@ -413,6 +417,14 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 
 		stratCallData();
 
+	};
+
+	$scope.changedTimebegin = function(time) {
+		var milliseconds = time.getTime();
+		var timecal = new Date(milliseconds);
+		var timebegin = [ timecal.getHours().padLeft(),
+				timecal.getMinutes().padLeft(), "00" ].join(':');
+		$scope.timebegin = timebegin;
 	};
 
 	var stratCallData = function(statemonitor) {
@@ -802,7 +814,6 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 			chartMeasurement = nv.models.lineChart().showLegend(true)
 					.showYAxis(true).showXAxis(true).useInteractiveGuideline(
 							true);
-
 			chartMeasurement.xAxis.axisLabel('Time').rotateLabels(-20)
 					.tickFormat(function(d) {
 						return d3.time.format('%X')(new Date(d))
