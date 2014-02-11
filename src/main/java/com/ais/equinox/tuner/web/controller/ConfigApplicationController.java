@@ -119,7 +119,7 @@ public class ConfigApplicationController {
 
 		System.out.println("output>>GetconfigurationApp : "
 				+ jsObject.toString());
-		SystemLogger.logger.info("output>>GetconfigurationApp : "
+		SystemLogger.logger.info("[ConfigAppController]:output>>GetconfigurationApp : "
 				+ jsObject.toString());	
 
 		return jsObject.toString();
@@ -130,7 +130,7 @@ public class ConfigApplicationController {
 	String saveConfigApp(@RequestBody final String json, HttpSession session,
 			Principal principal,HttpServletRequest request) {
 		System.out.println("savecongfigurationapp.htm : "+json);
-		SystemLogger.logger.info("savecongfigurationapp.htm : "+json);	
+		SystemLogger.logger.info("[ConfigAppController]:savecongfigurationapp.htm : "+json);	
 		BeanAppConfig beanAppConfigSave = new BeanAppConfig();
 		//Json Parser 
 		JsonParser jsParser = new JsonParser();
@@ -219,6 +219,7 @@ public class ConfigApplicationController {
 		/*  ++++++++++Get Path File Config +++++++++++*/
 		ServletContext sc = session.getServletContext();	
 		String pathFile = sc.getRealPath("/WEB-INF/config.xml");
+		SystemLogger.logger.info("[ConfigAppController]:GetRealPath : "+pathFile);
 		SaveConfigApp saveConfig = new SaveConfigApp();
 		saveConfig.createDocument(beanAppConfigSave,pathFile);
 		

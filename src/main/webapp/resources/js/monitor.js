@@ -86,307 +86,6 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 
 	$scope.timebegin;
 	$scope.timebeginmillisec;
-	var testdata = [ {
-		"time" : "2014-02-05 14:28:00",
-		"internalstat" : [ {
-			"Shutdown" : "NO"
-		}, {
-			"MessagePause" : "NO"
-		}, {
-			"ControlPause" : "NO"
-		}, {
-			"MainUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"MainProcessID" : "24238"
-		}, {
-			"FMONUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"FMONProcessID" : "24237"
-		} ],
-		"measurement" : [ {
-			"SFClientCount" : "0"
-		}, {
-			"HttpAvgResponseTime" : "0"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "0"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "0"
-		} ],
-		"measurementvalue" : [ {
-			"SFClientCount" : "1"
-		}, {
-			"HttpAvgResponseTime" : "391475"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "17249796"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "40887"
-		} ],
-		"acculating" : [ {
-			"HttpBusyMessageCount" : "0"
-		}, {
-			"HttpSentMessageCount" : "0"
-		}, {
-			"HttpRecvMessageCount" : "0"
-		}, {
-			"EDBPurgeMessageCount" : "0"
-		}, {
-			"SFSentMessageCount" : "0"
-		}, {
-			"SFReplyMessageCount" : "0"
-		}, {
-			"SFRecvMessageCount" : "0"
-		}, {
-			"FMONFaultCount" : "0"
-		} ]
-	}, {
-		"time" : "2014-02-05 14:28:10",
-		"internalstat" : [ {
-			"Shutdown" : "NO"
-		}, {
-			"MessagePause" : "NO"
-		}, {
-			"ControlPause" : "NO"
-		}, {
-			"MainUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"MainProcessID" : "24238"
-		}, {
-			"FMONUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"FMONProcessID" : "24237"
-		} ],
-		"measurement" : [ {
-			"SFClientCount" : "0"
-		}, {
-			"HttpAvgResponseTime" : "0"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "0"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "0"
-		} ],
-		"measurementvalue" : [ {
-			"SFClientCount" : "1"
-		}, {
-			"HttpAvgResponseTime" : "391475"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "17249796"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "40887"
-		} ],
-		"acculating" : [ {
-			"HttpBusyMessageCount" : "0"
-		}, {
-			"HttpSentMessageCount" : "0"
-		}, {
-			"HttpRecvMessageCount" : "0"
-		}, {
-			"EDBPurgeMessageCount" : "0"
-		}, {
-			"SFSentMessageCount" : "0"
-		}, {
-			"SFReplyMessageCount" : "0"
-		}, {
-			"SFRecvMessageCount" : "0"
-		}, {
-			"FMONFaultCount" : "0"
-		} ]
-	}, {
-		"time" : "2014-02-05 14:28:20",
-		"internalstat" : [ {
-			"Shutdown" : "NO"
-		}, {
-			"MessagePause" : "NO"
-		}, {
-			"ControlPause" : "NO"
-		}, {
-			"MainUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"MainProcessID" : "24238"
-		}, {
-			"FMONUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"FMONProcessID" : "24237"
-		} ],
-		"measurement" : [ {
-			"SFClientCount" : "0"
-		}, {
-			"HttpAvgResponseTime" : "0"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "0"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "0"
-		} ],
-		"measurementvalue" : [ {
-			"SFClientCount" : "1"
-		}, {
-			"HttpAvgResponseTime" : "391475"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "17249796"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "40887"
-		} ],
-		"acculating" : [ {
-			"HttpBusyMessageCount" : "0"
-		}, {
-			"HttpSentMessageCount" : "0"
-		}, {
-			"HttpRecvMessageCount" : "0"
-		}, {
-			"EDBPurgeMessageCount" : "0"
-		}, {
-			"SFSentMessageCount" : "0"
-		}, {
-			"SFReplyMessageCount" : "0"
-		}, {
-			"SFRecvMessageCount" : "0"
-		}, {
-			"FMONFaultCount" : "0"
-		} ]
-	}, {
-		"time" : "2014-02-05 14:28:30",
-		"internalstat" : [ {
-			"Shutdown" : "NO"
-		}, {
-			"MessagePause" : "NO"
-		}, {
-			"ControlPause" : "NO"
-		}, {
-			"MainUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"MainProcessID" : "24238"
-		}, {
-			"FMONUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"FMONProcessID" : "24237"
-		} ],
-		"measurement" : [ {
-			"SFClientCount" : "0"
-		}, {
-			"HttpAvgResponseTime" : "0"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "0"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "0"
-		} ],
-		"measurementvalue" : [ {
-			"SFClientCount" : "1"
-		}, {
-			"HttpAvgResponseTime" : "391475"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "17249796"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "40887"
-		} ],
-		"acculating" : [ {
-			"HttpBusyMessageCount" : "0"
-		}, {
-			"HttpSentMessageCount" : "0"
-		}, {
-			"HttpRecvMessageCount" : "0"
-		}, {
-			"EDBPurgeMessageCount" : "0"
-		}, {
-			"SFSentMessageCount" : "0"
-		}, {
-			"SFReplyMessageCount" : "0"
-		}, {
-			"SFRecvMessageCount" : "0"
-		}, {
-			"FMONFaultCount" : "0"
-		} ]
-	}, {
-		"time" : "2014-02-05 14:28:40",
-		"internalstat" : [ {
-			"Shutdown" : "NO"
-		}, {
-			"MessagePause" : "NO"
-		}, {
-			"ControlPause" : "NO"
-		}, {
-			"MainUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"MainProcessID" : "24238"
-		}, {
-			"FMONUpSince" : "2014-01-23 17:26:45"
-		}, {
-			"FMONProcessID" : "24237"
-		} ],
-		"measurement" : [ {
-			"SFClientCount" : "0"
-		}, {
-			"HttpAvgResponseTime" : "0"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "0"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "0"
-		} ],
-		"measurementvalue" : [ {
-			"SFClientCount" : "1"
-		}, {
-			"HttpAvgResponseTime" : "391475"
-		}, {
-			"HttpSessionCount" : "0"
-		}, {
-			"HttpMaxResponseTime" : "17249796"
-		}, {
-			"SFSendQueueCount" : "0"
-		}, {
-			"HttpMinResponseTime" : "40887"
-		} ],
-		"acculating" : [ {
-			"HttpBusyMessageCount" : "0"
-		}, {
-			"HttpSentMessageCount" : "0"
-		}, {
-			"HttpRecvMessageCount" : "0"
-		}, {
-			"EDBPurgeMessageCount" : "0"
-		}, {
-			"SFSentMessageCount" : "0"
-		}, {
-			"SFReplyMessageCount" : "0"
-		}, {
-			"SFRecvMessageCount" : "0"
-		}, {
-			"FMONFaultCount" : "0"
-		} ]
-	} ];
 
 	$scope.onClickNodeMonitor = function($event, statemonitor, $index) {
 
@@ -403,18 +102,19 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 		$scope.timebeginmillisec = datetime;
 		$scope.timebegin = timebegin;
 		$scope.statemonitor = statemonitor;
+		console.log("105", $scope.statemonitor);
+		console.log("106", statemonitor);
+		getDataDefault($scope.statemonitor, timebegin);
 
-		getDataDefault(statemonitor, timebegin);
-
-		stratCallData(statemonitor);
+		stratCallData($scope.statemonitor);
 
 	};
 
 	$scope.timeChange = function(timebegin) {
 
 		stopCallData();
-		getDataDefault($scope.statemonitor, timebegin);
 
+		getDataDefault($scope.statemonitor, timebegin);
 		stratCallData();
 
 	};
@@ -453,13 +153,13 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 	/**
 	 * Chart
 	 */
-	var getDataDefault = function(statemonitor, dformat) {
-
+	var getDataDefault = function(statemonitor, time) {
+		console.log("getDatatDefault", statemonitor)
 		var objectPost = {
-			name : statemonitor,
-			timebefor : dformat
+			name : statemonitor.text,
+			time : time
 		};
-
+		console.log("objectPost", objectPost);
 		$scope.dbMeasurement = [];
 		$scope.dbAccumulating = [];
 		$scope.dbmeasurementvalue = [];
@@ -470,11 +170,29 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 		db_systemmeasurementvalue = [];
 		db_accumulating = [];
 
-		processDataToChartDefualt(testdata);
+		$http({
+			url : 'monitor/getstatequinoxretroact.htm',
+			method : "POST",
+			data : objectPost,
+			headers : {
+				'Content-Type' : 'applictaion/json',
+				'mimeType' : 'application/json'
+			}
+		}).success(function(data, status) {
+			console.log("181", status, data);
+			if (status == 200) {
+				if (!jQuery.isEmptyObject(data)) {
+					console.log(data);
+					processDataToChartDefualt(data);
+				}
+			}
+		}).error(function(data, status) {
+			alert("Error");
+		});
 
 	};
 	var getDataToChart = function(statemonitor) {
-
+		console.log("getDataToChart", statemonitor);
 		$http({
 			url : 'monitor/getstatequinox.htm',
 			method : "POST",
@@ -486,6 +204,7 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 		}).success(function(data, status) {
 			if (status == 200) {
 				if (!jQuery.isEmptyObject(data)) {
+
 					processDataToChartReal(data);
 				}
 			} else {
@@ -691,92 +410,98 @@ var MonitorController = function($scope, $http, $interval, $timeout) {
 		var match = data.time.match(/^(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\:(\d+)$/);
 		var datetime = (Date.UTC(match[1], match[2] - 1, match[3], match[4],
 				match[5], match[6]) - (7 * 3600 * 1000));
-		if (data.time != oldData.time) {
-			oldData = data;
+		if (!jQuery.isEmptyObject(oldData)) {
+			if (data.time != oldData.time) {
+				oldData = data;
 
-			/**
-			 * Measurement acceleration
-			 */
-			if (!jQuery.isEmptyObject(data.measurement)) {
-				for ( var int = 0; int < data.measurement.length; int++) {
-					var obj = data.measurement[int];
-					for ( var key in obj) {
+				/**
+				 * Measurement acceleration
+				 */
+				if (!jQuery.isEmptyObject(data.measurement)) {
+					for ( var int = 0; int < data.measurement.length; int++) {
+						var obj = data.measurement[int];
+						for ( var key in obj) {
 
-						var attrName = key;
-						var attrValue = obj[key];
-						for ( var j = 0; j < db_systemmeasurement.length; j++) {
+							var attrName = key;
+							var attrValue = obj[key];
+							for ( var j = 0; j < db_systemmeasurement.length; j++) {
 
-							if (db_systemmeasurement[j].key == attrName) {
-								var inputData = {
-									x : parseInt(datetime),
-									y : parseInt(attrValue)
-								};
-								db_systemmeasurement[j].values.push(inputData);
+								if (db_systemmeasurement[j].key == attrName) {
+									var inputData = {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									};
+									db_systemmeasurement[j].values
+											.push(inputData);
+								}
 							}
 						}
 					}
 				}
-			}
-			// ===================================================
-			/**
-			 * Measurement
-			 */
-			if (!jQuery.isEmptyObject(data.measurementvalue)) {
-				for ( var int = 0; int < data.measurementvalue.length; int++) {
-					var obj = data.measurementvalue[int];
-					for ( var key in obj) {
+				// ===================================================
+				/**
+				 * Measurement
+				 */
+				if (!jQuery.isEmptyObject(data.measurementvalue)) {
+					for ( var int = 0; int < data.measurementvalue.length; int++) {
+						var obj = data.measurementvalue[int];
+						for ( var key in obj) {
 
-						var attrName = key;
-						var attrValue = obj[key];
-						for ( var j = 0; j < db_systemmeasurementvalue.length; j++) {
+							var attrName = key;
+							var attrValue = obj[key];
+							for ( var j = 0; j < db_systemmeasurementvalue.length; j++) {
 
-							if (db_systemmeasurementvalue[j].key == attrName) {
-								var inputData = {
-									x : parseInt(datetime),
-									y : parseInt(attrValue)
-								};
-								db_systemmeasurementvalue[j].values
-										.push(inputData);
+								if (db_systemmeasurementvalue[j].key == attrName) {
+									var inputData = {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									};
+									db_systemmeasurementvalue[j].values
+											.push(inputData);
+								}
 							}
 						}
 					}
 				}
-			}
-			// ========================================================
-			/**
-			 * Acculating
-			 */
-			if (!jQuery.isEmptyObject(data.acculating)) {
-				for ( var int = 0; int < data.acculating.length; int++) {
-					var obj = data.acculating[int];
-					for ( var key in obj) {
+				// ========================================================
+				/**
+				 * Acculating
+				 */
+				if (!jQuery.isEmptyObject(data.acculating)) {
+					for ( var int = 0; int < data.acculating.length; int++) {
+						var obj = data.acculating[int];
+						for ( var key in obj) {
 
-						var attrName = key;
-						var attrValue = obj[key];
-						for ( var j = 0; j < db_accumulating.length; j++) {
+							var attrName = key;
+							var attrValue = obj[key];
+							for ( var j = 0; j < db_accumulating.length; j++) {
 
-							if (db_accumulating[j].key == attrName) {
-								var inputData = {
-									x : parseInt(datetime),
-									y : parseInt(attrValue)
-								};
-								db_accumulating[j].values.push(inputData);
+								if (db_accumulating[j].key == attrName) {
+									var inputData = {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									};
+									db_accumulating[j].values.push(inputData);
+								}
 							}
 						}
 					}
 				}
-			}
-			// ========================================================
-			/**
-			 * Internalstat Status
-			 */
-			if (!jQuery.isEmptyObject(data.internalstat)) {
+				// ========================================================
+				/**
+				 * Internalstat Status
+				 */
+				if (!jQuery.isEmptyObject(data.internalstat)) {
 
-				db_systeminternalstatus = data.internalstat
+					db_systeminternalstatus = data.internalstat
 
+				}
 			}
+		} else {
+			stopCallData();
+			alert("Statics is Empty.");
+
 		}
-
 		$scope.dbSystem = db_systeminternalstatus;
 		$scope.dbMeasurement = db_systemmeasurement;
 		$scope.dbmeasurementvalue = db_systemmeasurementvalue;

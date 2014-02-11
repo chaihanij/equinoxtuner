@@ -25,7 +25,7 @@ public class ManageStatType {
 	private ArrayList<String> typeAccumulation = new ArrayList<String>();
 
 	private BeanStatEquinoxAllType beanStatAll = new BeanStatEquinoxAllType();
-
+	
 	public BeanStatEquinoxAllType  PorcessStat( Stack<String> stackStr) {
 		ArrayList<String[]> internalStat = new ArrayList<String[]>();		
 		ArrayList<String[]> accumulationStat = new ArrayList<String[]>();

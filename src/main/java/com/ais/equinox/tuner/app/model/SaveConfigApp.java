@@ -11,6 +11,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import com.ais.equinox.tuner.Main;
+import com.ais.equinox.tuner.SystemLogger;
 import com.ais.equinox.tuner.app.bean.BeanAppConfig;
 
 public class SaveConfigApp {
@@ -83,9 +84,11 @@ public class SaveConfigApp {
 			output.write(document);
 			output.close();
 			System.out.println("+++++ WriteXML Completed +++++");
+			SystemLogger.logger.info("[SaveConfigApp]:+++++ WriteXML Completed +++++");
 		} catch (IOException e) {
 			System.out.println("Write File ERROR");
 			System.out.println(e.getMessage());
+			SystemLogger.logger.error("[SaveConfigApp]:Write File ERROR"+e);
 		}
 
 	}

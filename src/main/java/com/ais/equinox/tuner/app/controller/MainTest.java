@@ -7,9 +7,11 @@ import java.util.Date;
 import java.util.Stack;
 
 import com.ais.equinox.tuner.app.bean.BeanAppConfig;
+import com.ais.equinox.tuner.app.bean.BeanBlockStat;
 import com.ais.equinox.tuner.app.bean.BeanConfig;
 import com.ais.equinox.tuner.app.bean.BeanStatEquinoxAllType;
 import com.ais.equinox.tuner.app.model.CommandShell;
+import com.ais.equinox.tuner.app.model.ConnectGetStat;
 import com.ais.equinox.tuner.app.model.ConnectNodeExec;
 import com.ais.equinox.tuner.app.model.ManageStatType;
 import com.ais.equinox.tuner.app.model.SCPupload;
@@ -63,24 +65,44 @@ scp.uploadFile(pathLocalFile, remoteFile, host, user, pass);
 }
 	}
 	public static void main(String[] args) {
-		UploadSCP();
+//		UploadSCP();
 		
 //	}
-//		String host = "10.252.192.15";
-//		String user = "root";
-//		String pass = "$And@ais;";
+		String host = "10.252.192.15";
+		String user = "toro";
+		String pass = "toro";
+		String fileName = "TJ.ES05.httpserver.0_20140206.stat";
+		String [] cmdSet = {"eqx TJ forcestop","@matches .*(y/n).*","@end y"};		
+		CommandShell commandShell = new CommandShell("Test",host, user, pass, cmdSet);
 		
-//		String [] cmdSet = {"eqx TJ forcestop","@matches .*(y/n).*","@end y"};		
-//		CommandShell commandShell = new CommandShell("Test",host, user, pass, cmdSet);
+		//Set Config
+		ParserConfigApp parser = new ParserConfigApp();
+		BeanAppConfig beanconfigapp =parser.parser("C:\\Users\\Dee\\AISTunerconfig\\equinoxtuner\\config.xml");
+		BeanConfig.beanConfigApp=beanconfigapp;
 		
-//		//Set Config
-//		ParserConfigApp parser = new ParserConfigApp();
-//		BeanAppConfig beanconfigapp =parser.parser();
-//		BeanConfig.beanConfigApp=beanconfigapp;
-//		
-//		String testCommand = " tail -n 150 /home/dee/statEquinox/OCF5.ES00.x.0_20130924.stat";
-//		ConnectNodeExec connect = new ConnectNodeExec(host, user, pass);
-//		Stack<String> stackStr = connect.connectgetStat(testCommand,"1234");
+		String testCommand = " tail -n 200 /opt/equinox/stat/TJ.ES05.httpserver.0_20140206.stat";
+		ConnectGetStat connection = new ConnectGetStat(host,user,pass,"100",beanconfigapp.getPathStatEquinox(),fileName,beanconfigapp.getStatInterval(),"1234");	
+		
+		
+		ArrayList<BeanBlockStat> beanStat = connection.run2("2014-02-06 23:50:52");
+	    for (BeanBlockStat beanBlockStat : beanStat) {
+	    	
+	    	System.out.println("+++++++++++++++++  Time : "+beanBlockStat.getTime()+"  +++++++++++++++++++++++");
+	    	for (String[] data : beanBlockStat.getSystemInternalStat()) {
+				System.out.println(data[0]+" = "+data[1]);
+			}
+	    	for (String[] data : beanBlockStat.getAccumulatingCounters()) {
+	    		System.out.println(data[0]+" = "+data[1]);
+			}
+	    	for (String[] data : beanBlockStat.getSystemMeasurement()) {
+	    		System.out.println(data[0]+" = "+data[1]);
+	    	}
+	    	for (String[] data : beanBlockStat.getSystemMeasurementvalue()) {
+	    		System.out.println(data[0]+" = "+data[1]);
+	    	}
+	    	
+	    	
+		}
 //		ManageStatType manage = new ManageStatType("1234");
 //		BeanStatEquinoxAllType beanStat =manage.PorcessStat(stackStr);
 //		System.out.println("==============================================================");
@@ -173,7 +195,7 @@ scp.uploadFile(pathLocalFile, remoteFile, host, user, pass);
 	   System.out.println("Time in minutes: " + diffMinutes + " minutes.");         
 	   System.out.println("Time in hours: " + diffHours + " hours."); 
 	   
-		
+	   
 		
 	}
 
