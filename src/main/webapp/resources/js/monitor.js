@@ -1,6 +1,6 @@
 'use strict';
 var DEBUG = false;
-var MonitorController = function($scope, $http, $interval) {
+var MonitorController = function($scope, $http, $interval, $timeout) {
 
 	/**
 	 * Visible View
@@ -82,39 +82,67 @@ var MonitorController = function($scope, $http, $interval) {
 
 	var stop;
 	var duration = 1000 * 10;
+	var timedefault = 180 * 1000;
+
+	$scope.timebegin;
+	$scope.timebeginmillisec;
+
 	$scope.onClickNodeMonitor = function($event, statemonitor, $index) {
 
 		$scope.selectedIndexNodeMonitor = $index;
 
-		stopCallData();
-		$scope.dbMeasurement = [];
-		$scope.dbAccumulating = [];
-		$scope.dbmeasurementvalue = [];
-		$scope.visibleCharts = true;
-		xaxis = [];
-		db_systeminternalstatus = [];
-		db_systemmeasurement = [];
-		db_systemmeasurementvalue = [];
-		db_accumulating = [];
+		var milliseconds = new Date().getTime();
+		var timecal = new Date((milliseconds - timedefault));
+		var timebegin = [ timecal.getHours().padLeft(),
+				timecal.getMinutes().padLeft(), "00" ].join(':');
 
-		getDataToChart(statemonitor);
+		var datetime = (Date.UTC(0, 0, 0, timecal.getHours(), timecal
+				.getMinutes(), timecal.getSeconds()) - (7 * 3600 * 1000));
+
+		$scope.timebeginmillisec = datetime;
+		$scope.timebegin = timebegin;
+		$scope.statemonitor = statemonitor;
+		console.log("105", $scope.statemonitor);
+		console.log("106", statemonitor);
+		getDataDefault($scope.statemonitor, timebegin);
+
+		stratCallData($scope.statemonitor);
+
+	};
+
+	$scope.timeChange = function(timebegin) {
+
+		stopCallData();
+
+		getDataDefault($scope.statemonitor, timebegin);
+		stratCallData();
+
+	};
+
+	$scope.changedTimebegin = function(time) {
+		var milliseconds = time.getTime();
+		var timecal = new Date(milliseconds);
+		var timebegin = [ timecal.getHours().padLeft(),
+				timecal.getMinutes().padLeft(), "00" ].join(':');
+		$scope.timebegin = timebegin;
+	};
+
+	var stratCallData = function(statemonitor) {
 
 		stop = $interval(function() {
 
 			getDataToChart(statemonitor);
 
-			if (DEBUG != false)
-				console.log("onclick", statemonitor);
-
 		}, duration);
 
 	};
-
 	var stopCallData = function() {
+
 		if (angular.isDefined(stop)) {
 			$interval.cancel(stop);
 			stop = undefined;
 		}
+
 	};
 
 	$scope.$on('$destroy', function() {
@@ -125,9 +153,46 @@ var MonitorController = function($scope, $http, $interval) {
 	/**
 	 * Chart
 	 */
+	var getDataDefault = function(statemonitor, time) {
+		console.log("getDatatDefault", statemonitor)
+		var objectPost = {
+			name : statemonitor.text,
+			time : time
+		};
+		console.log("objectPost", objectPost);
+		$scope.dbMeasurement = [];
+		$scope.dbAccumulating = [];
+		$scope.dbmeasurementvalue = [];
+		$scope.visibleCharts = true;
 
+		db_systeminternalstatus = [];
+		db_systemmeasurement = [];
+		db_systemmeasurementvalue = [];
+		db_accumulating = [];
+
+		$http({
+			url : 'monitor/getstatequinoxretroact.htm',
+			method : "POST",
+			data : objectPost,
+			headers : {
+				'Content-Type' : 'applictaion/json',
+				'mimeType' : 'application/json'
+			}
+		}).success(function(data, status) {
+			console.log("181", status, data);
+			if (status == 200) {
+				if (!jQuery.isEmptyObject(data)) {
+					console.log(data);
+					processDataToChartDefualt(data);
+				}
+			}
+		}).error(function(data, status) {
+			alert("Error");
+		});
+
+	};
 	var getDataToChart = function(statemonitor) {
-
+		console.log("getDataToChart", statemonitor);
 		$http({
 			url : 'monitor/getstatequinox.htm',
 			method : "POST",
@@ -137,28 +202,17 @@ var MonitorController = function($scope, $http, $interval) {
 				'mimeType' : 'application/json'
 			}
 		}).success(function(data, status) {
-
 			if (status == 200) {
-
 				if (!jQuery.isEmptyObject(data)) {
 
-					generateDataToChart(statemonitor, data);
-
+					processDataToChartReal(data);
 				}
-
 			} else {
-
-				if (DEBUG != false) {
+				if (DEBUG != false)
 					console.log(status);
-				}
 			}
-
 		}).error(function(data, status) {
-
-			if (DEBUG != false)
-				console.log(status);
 			alert("Error");
-
 		});
 
 	};
@@ -177,110 +231,192 @@ var MonitorController = function($scope, $http, $interval) {
 
 	var db_accumulating = [];
 
-	var xaxis = [];
-
 	var oldData = null;
 
-	$scope.dataRealtime;
-	$scope.xaxis;
+	var processDataToChartDefualt = function(data) {
+		// Data != EmptyObject
+		if (!jQuery.isEmptyObject(data)) {
 
-	var generateDataToChart = function(statemonitor, data) {
+			for ( var int = 0; int < data.length; int++) {
 
-		$scope.statemonitor = statemonitor;
-		$scope.dataRealtime = data;
-		xaxis.push(data.time)
+				var match = data[int].time
+						.match(/^(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\:(\d+)$/);
+				var datetime = (Date.UTC(match[1], match[2] - 1, match[3],
+						match[4], match[5], match[6]) - (7 * 3600 * 1000));
+
+				if (int == 0) {
+
+					/** Measurement == acceleration */
+					if (!jQuery.isEmptyObject(data[int].measurement)) {
+						for ( var i = 0; i < data[int].measurement.length; i++) {
+							var obj = data[int].measurement[i];
+							for ( var key in obj) {
+								var attrName = key;
+								var attrValue = obj[key];
+								var series = {
+									key : attrName,
+									values : [ {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									} ]
+								};
+								db_systemmeasurement.push(series);
+							}
+						}
+					}
+					// ===================================================
+					/** Measurement */
+					if (!jQuery.isEmptyObject(data[int].measurementvalue)) {
+						for ( var i = 0; i < data[int].measurementvalue.length; i++) {
+							var obj = data[int].measurementvalue[i];
+							for ( var key in obj) {
+								var attrName = key;
+								var attrValue = obj[key];
+								var series = {
+									key : attrName,
+									values : [ {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									} ]
+								};
+								db_systemmeasurementvalue.push(series);
+							}
+						}
+					}
+					// ========================================================
+					/** Acculating */
+					if (!jQuery.isEmptyObject(data[int].acculating)) {
+
+						for ( var i = 0; i < data[int].acculating.length; i++) {
+							var obj = data[int].acculating[i];
+							for ( var key in obj) {
+								var attrName = key;
+								var attrValue = obj[key];
+
+								var series = {
+									key : attrName,
+									values : [ {
+										x : parseInt(datetime),
+										y : parseInt(attrValue)
+									} ]
+								};
+
+								db_accumulating.push(series);
+
+							}
+						}
+					}
+					// ========================================================
+				} else {
+
+					/**
+					 * Measurement == acceleration
+					 */
+					if (!jQuery.isEmptyObject(data[int].measurement)) {
+						for ( var i = 0; i < data[int].measurement.length; i++) {
+							var obj = data[int].measurement[i];
+							for ( var key in obj) {
+								var attrName = key;
+								var attrValue = obj[key];
+								for ( var j = 0; j < db_systemmeasurement.length; j++) {
+
+									if (db_systemmeasurement[j].key == attrName) {
+										var inputData = {
+											x : parseInt(datetime),
+											y : parseInt(attrValue)
+										};
+										db_systemmeasurement[j].values
+												.push(inputData);
+									}
+								}
+							}
+						}
+					}
+					// ========================================================
+					/**
+					 * Measurement
+					 */
+					if (!jQuery.isEmptyObject(data[int].measurementvalue)) {
+						for ( var i = 0; i < data[int].measurementvalue.length; i++) {
+							var obj = data[int].measurementvalue[i];
+							for ( var key in obj) {
+
+								var attrName = key;
+								var attrValue = obj[key];
+								for ( var j = 0; j < db_systemmeasurementvalue.length; j++) {
+
+									if (db_systemmeasurementvalue[j].key == attrName) {
+										var inputData = {
+											x : parseInt(datetime),
+											y : parseInt(attrValue)
+										};
+										db_systemmeasurementvalue[j].values
+												.push(inputData);
+									}
+								}
+							}
+						}
+					}
+					// ========================================================
+					/**
+					 * Acculating
+					 */
+					if (!jQuery.isEmptyObject(data[int].acculating)) {
+						for ( var i = 0; i < data[int].acculating.length; i++) {
+							var obj = data[int].acculating[i];
+							for ( var key in obj) {
+
+								var attrName = key;
+								var attrValue = obj[key];
+								for ( var j = 0; j < db_accumulating.length; j++) {
+
+									if (db_accumulating[j].key == attrName) {
+										var inputData = {
+											x : parseInt(datetime),
+											y : parseInt(attrValue)
+										};
+										db_accumulating[j].values
+												.push(inputData);
+									}
+								}
+							}
+						}
+					}
+				}
+				// End If Else
+
+				if (int == data.length - 1) {
+					oldData = data[int];
+					if (!jQuery.isEmptyObject(data[int].internalstat)) {
+						db_systeminternalstatus = data[int].internalstat
+					}
+				}
+			}
+			// End For
+		}
+		// End IF Check null
+		$scope.dbSystem = db_systeminternalstatus;
+		$scope.dbMeasurement = db_systemmeasurement;
+		$scope.dbmeasurementvalue = db_systemmeasurementvalue;
+		$scope.dbAccumulating = db_accumulating;
+
+		redrawAccumulating();
+		redrawMeasurement();
+		redrawMeasurementvalue();
+	};
+
+	var processDataToChartReal = function(data) {
 
 		var match = data.time.match(/^(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\:(\d+)$/);
 		var datetime = (Date.UTC(match[1], match[2] - 1, match[3], match[4],
 				match[5], match[6]) - (7 * 3600 * 1000));
-
-		if (jQuery.isEmptyObject(db_systeminternalstatus)
-				&& jQuery.isEmptyObject(db_systemmeasurement)
-				&& jQuery.isEmptyObject(db_systemmeasurementvalue)
-				&& jQuery.isEmptyObject(db_accumulating)) {
-
-			oldData = data;
-			xaxis.push(data.time);
-			if (!jQuery.isEmptyObject(data.internalstat)) {
-
-				db_systeminternalstatus = data.internalstat
-			}
-
-			// Measurement === acceleration
-			if (!jQuery.isEmptyObject(data.measurement)) {
-
-				for ( var i = 0; i < data.measurement.length; i++) {
-					var obj = data.measurement[i];
-					for ( var key in obj) {
-						var attrName = key;
-						var attrValue = obj[key];
-						var series = {
-							key : attrName,
-							values : [ {
-								x : parseInt(datetime),
-								y : parseInt(attrValue)
-							} ]
-						};
-						db_systemmeasurement.push(series);
-					}
-				}
-
-			}
-			// Measurement === value
-			if (!jQuery.isEmptyObject(data.measurementvalue)) {
-
-				for ( var i = 0; i < data.measurementvalue.length; i++) {
-					var obj = data.measurementvalue[i];
-					for ( var key in obj) {
-						var attrName = key;
-						var attrValue = obj[key];
-						var series = {
-							key : attrName,
-							values : [ {
-								x : parseInt(datetime),
-								y : parseInt(attrValue)
-							} ]
-						};
-						db_systemmeasurementvalue.push(series);
-					}
-				}
-
-			}
-			// Acculating ===
-			if (!jQuery.isEmptyObject(data.acculating)) {
-
-				for ( var i = 0; i < data.acculating.length; i++) {
-					var obj = data.acculating[i];
-					for ( var key in obj) {
-						var attrName = key;
-						var attrValue = obj[key];
-
-						var series = {
-							key : attrName,
-							values : [ {
-								x : parseInt(datetime),
-								y : parseInt(attrValue)
-							} ]
-						};
-
-						db_accumulating.push(series);
-
-					}
-				}
-			}
-
-		} else {
-
+		if (!jQuery.isEmptyObject(oldData)) {
 			if (data.time != oldData.time) {
 				oldData = data;
-				xaxis.push(data.time);
-				if (!jQuery.isEmptyObject(data.internalstat)) {
 
-					db_systeminternalstatus = data.internalstat
-
-				}
-
-				// Measurement === acceleration
+				/**
+				 * Measurement acceleration
+				 */
 				if (!jQuery.isEmptyObject(data.measurement)) {
 					for ( var int = 0; int < data.measurement.length; int++) {
 						var obj = data.measurement[int];
@@ -302,8 +438,10 @@ var MonitorController = function($scope, $http, $interval) {
 						}
 					}
 				}
-
-				// Measurement === Value
+				// ===================================================
+				/**
+				 * Measurement
+				 */
 				if (!jQuery.isEmptyObject(data.measurementvalue)) {
 					for ( var int = 0; int < data.measurementvalue.length; int++) {
 						var obj = data.measurementvalue[int];
@@ -325,8 +463,10 @@ var MonitorController = function($scope, $http, $interval) {
 						}
 					}
 				}
-
-				// Acculating ===
+				// ========================================================
+				/**
+				 * Acculating
+				 */
 				if (!jQuery.isEmptyObject(data.acculating)) {
 					for ( var int = 0; int < data.acculating.length; int++) {
 						var obj = data.acculating[int];
@@ -347,30 +487,42 @@ var MonitorController = function($scope, $http, $interval) {
 						}
 					}
 				}
+				// ========================================================
+				/**
+				 * Internalstat Status
+				 */
+				if (!jQuery.isEmptyObject(data.internalstat)) {
+
+					db_systeminternalstatus = data.internalstat
+
+				}
 			}
+		} else {
+			stopCallData();
+			alert("Statics is Empty.");
+
 		}
-		$scope.xaxis = xaxis;
 		$scope.dbSystem = db_systeminternalstatus;
 		$scope.dbMeasurement = db_systemmeasurement;
 		$scope.dbmeasurementvalue = db_systemmeasurementvalue;
 		$scope.dbAccumulating = db_accumulating;
 
-		var tatolpoint = 10;
+		var tatolpoint = 18;
 		for ( var j = 0; j < db_accumulating.length; j++) {
 
-			if (db_accumulating[j].values.length == tatolpoint) {
+			if (db_accumulating[j].values.length >= tatolpoint) {
 				db_accumulating[j].values.splice(0, 1);
 			}
 		}
 		for ( var j = 0; j < db_systemmeasurement.length; j++) {
 
-			if (db_systemmeasurement[j].values.length == tatolpoint) {
+			if (db_systemmeasurement[j].values.length >= tatolpoint) {
 				db_systemmeasurement[j].values.splice(0, 1);
 			}
 		}
 		for ( var j = 0; j < db_systemmeasurementvalue.length; j++) {
 
-			if (db_systemmeasurementvalue[j].values.length == tatolpoint) {
+			if (db_systemmeasurementvalue[j].values.length >= tatolpoint) {
 				db_systemmeasurementvalue[j].values.splice(0, 1);
 			}
 		}
@@ -378,6 +530,7 @@ var MonitorController = function($scope, $http, $interval) {
 		redrawAccumulating();
 		redrawMeasurement();
 		redrawMeasurementvalue();
+
 	};
 
 	var chartMeasurement;
@@ -386,7 +539,6 @@ var MonitorController = function($scope, $http, $interval) {
 			chartMeasurement = nv.models.lineChart().showLegend(true)
 					.showYAxis(true).showXAxis(true).useInteractiveGuideline(
 							true);
-
 			chartMeasurement.xAxis.axisLabel('Time').rotateLabels(-20)
 					.tickFormat(function(d) {
 						return d3.time.format('%X')(new Date(d))
@@ -452,3 +604,7 @@ var MonitorController = function($scope, $http, $interval) {
 		});
 	};
 };
+Number.prototype.padLeft = function(base, chr) {
+	var len = (String(base || 10).length - String(this).length) + 1;
+	return len > 0 ? new Array(len).join(chr || '0') + this : this;
+}

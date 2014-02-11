@@ -78,11 +78,11 @@ public class TunerConfigurationController {
 			}
 			if (true == Main.DEBUG_CONSOLE)
 				System.out.println(jaSysGroup);
-			SystemLogger.logger.info(jaSysGroup);
+		
 			return jaSysGroup.toString();
 		} catch (Exception e) {
 			System.out.println("==============  ERROR in Get SessionGroup  ===================");
-			SystemLogger.logger.error("ERROR in Get SessionGroup", e);
+			SystemLogger.logger.error("[TunerController]:ERROR in Get SessionGroup", e);
 			return jaSysGroup.toString();
 		}
 	}
@@ -97,7 +97,7 @@ public class TunerConfigurationController {
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("pahtView = " + path
 					+ "/getcongfigurationname.json" + " input =" + json);
-		SystemLogger.logger.info("InputData getcongfigurationname.htm : "+json);
+		SystemLogger.logger.info("[TunerController]:InputData getcongfigurationname.htm : "+json);
 
 		JsonArray array = new JsonArray();
 		try {
@@ -152,14 +152,14 @@ public class TunerConfigurationController {
 
 			if (true == Main.DEBUG_CONSOLE)
 				System.out.println("Outputgetappication" + array.toString());
-			SystemLogger.logger.info("Output getcongfigurationname.htm : "+array.toString());
+			SystemLogger.logger.info("[TunerController]:Output getcongfigurationname.htm : "+array.toString());
 			return array.toString();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out
 					.println("==============  ERROR in getConfigurationName  ===================");
-		SystemLogger.logger.error("ERROR in getConfigurationName", e);
+		SystemLogger.logger.error("[TunerController]:ERROR in getConfigurationName", e);
 			return "[]";
 		}
 	}
@@ -173,7 +173,7 @@ public class TunerConfigurationController {
 
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("Input getconfigutiondetail" + json);
-			SystemLogger.logger.info("Input getcongfigurationname.htm : "+json);
+			SystemLogger.logger.info("[TunerController]:Input getcongfigurationname.htm : "+json);
 		try {
 
 			/** Get Parameter array Application List **/
@@ -231,7 +231,7 @@ public class TunerConfigurationController {
 			try {
 				configInElement = configInElement.element("warm");
 			} catch (Exception e) {
-				SystemLogger.logger.error("ERROR in get configInElement", e);
+				SystemLogger.logger.error("[TunerController]:ERROR in get configInElement", e);
 				System.out.println("ERROR in get configInElement");
 			}
 
@@ -275,7 +275,7 @@ public class TunerConfigurationController {
 			jaArray.add(object);
 			System.out.println("Output getconfigutiondetail.htm"
 					+ jaArray.toString());
-			SystemLogger.logger.info("Output getconfigutiondetail.htm"
+			SystemLogger.logger.info("[TunerController]:Output getconfigutiondetail.htm"
 					+ jaArray.toString());
 			/** Retrun array Application List **/
 			// if (true == Main.DEBUG_CONSOLE)
@@ -285,7 +285,7 @@ public class TunerConfigurationController {
 			System.out
 					.println("==============  ERROR in Keep Value in Session  ===================");
 			System.out.println("ERROR : Paramiter Missmatch");
-			SystemLogger.logger.error("ERROR in Get ConfigulationDetail: Paramiter Missmatch", e);
+			SystemLogger.logger.error("[TunerController]:ERROR in Get ConfigulationDetail: Paramiter Missmatch", e);
 			return "[]";
 		}
 
@@ -310,7 +310,7 @@ public class TunerConfigurationController {
 		String pathFileLocal = sc.getRealPath("/temp/");
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("intput onclickapply.htm" + json);
-			SystemLogger.logger.info("intput onclickapply.htm" + json);
+			SystemLogger.logger.info("[TunerController]:intput onclickapply.htm" + json);
 		
 		// Parser Json
 		JsonParser jsParser = new JsonParser();
@@ -387,7 +387,7 @@ public class TunerConfigurationController {
 			} catch (Exception e) {
 				System.out
 						.println("============== ERROR in Even Apply : Add MapRecovery in Session  ===================");
-				SystemLogger.logger.error("ERROR in Even Apply : Add MapRecovery in Session", e);
+				SystemLogger.logger.error("[TunerController]:ERROR in Even Apply : Add MapRecovery in Session", e);
 			}
 
 			// Write new XML file
@@ -418,7 +418,7 @@ public class TunerConfigurationController {
 
 		} else {
 			System.out.println("Event Apply MisMatch value in HashMap");
-			SystemLogger.logger.error("Event Apply MisMatch value in HashMap");
+			SystemLogger.logger.error("[TunerController]:Event Apply MisMatch value in HashMap");
 		}
 
 		return "";
@@ -430,7 +430,7 @@ public class TunerConfigurationController {
 			Principal principal) {
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("input onclicksave.htm" + json);
-			SystemLogger.logger.info("input onclicksave.htm" + json);
+			SystemLogger.logger.info("[TunerController]:input onclicksave.htm" + json);
 		// Parser Json
 		JsonParser jsParser = new JsonParser();
 		JsonElement jsElemnet = jsParser.parse(json);
@@ -496,13 +496,13 @@ public class TunerConfigurationController {
 				}
 			} catch (Exception e) {
 				System.out.println("ERROR in Save");
-				SystemLogger.logger.error("ERROR in Save", e);
+				SystemLogger.logger.error("[TunerController]:ERROR in Save", e);
 				
 			}
 
 		} else {
 			System.out.println("Mismatch Element in Event SAVE");
-			SystemLogger.logger.error("ERROR in Save");
+			SystemLogger.logger.error("[TunerController]:ERROR in Save");
 		}
 		return "";
 	}
@@ -513,7 +513,7 @@ public class TunerConfigurationController {
 			Principal principal) {
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("input getloadlist.htm" + json);
-			SystemLogger.logger.info("input getloadlist.htm" + json);
+			SystemLogger.logger.info("[TunerController]:input getloadlist.htm" + json);
 		// input
 		String inputFileName = json;
 		try {
@@ -534,14 +534,14 @@ public class TunerConfigurationController {
 				return jsOb.toString();
 			} else {
 				System.out.println("No List Save ");
-				SystemLogger.logger.info("No List Save ");
+				SystemLogger.logger.info("[TunerController]:No List Save ");
 				
 				return "[]";
 			}
 
 		} catch (Exception e) {
 			System.out.println("ERROR in getLoadList");
-			SystemLogger.logger.error("ERROR in getLoadList", e);
+			SystemLogger.logger.error("[TunerController]:ERROR in getLoadList", e);
 			return "[]";
 		}
 
@@ -554,7 +554,7 @@ public class TunerConfigurationController {
 
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("input actionload.htm.htm" + json);
-		SystemLogger.logger.info("input actionload.htm.htm" + json);
+		SystemLogger.logger.info("[TunerController]:input actionload.htm.htm" + json);
 		// Parser Json
 		JsonParser jsParser = new JsonParser();
 		JsonElement jsElemnet = jsParser.parse(json);
@@ -617,7 +617,7 @@ public class TunerConfigurationController {
 			object.add("wram", warm);
 			jaArray.add(object);
 			System.out.println("Output actionLoad.htm" + jaArray.toString());
-			SystemLogger.logger.info("Output actionLoad.htm" + jaArray.toString());			
+			SystemLogger.logger.info("[TunerController]:Output actionLoad.htm" + jaArray.toString());			
 			return jaArray.toString();
 		} else {
 			System.out.println("No List Save ");
@@ -634,7 +634,7 @@ public class TunerConfigurationController {
 		if (true == Main.DEBUG_CONSOLE)
 			System.out
 					.println("intput onclickrecoveryshowlist.htm " + fileName);
-		SystemLogger.logger.info("intput onclickrecoveryshowlist.htm " + fileName);
+		SystemLogger.logger.info("[TunerController]:intput onclickrecoveryshowlist.htm " + fileName);
 
 		try {
 			// Edit By Dee
@@ -659,14 +659,14 @@ public class TunerConfigurationController {
 			if (true == Main.DEBUG_CONSOLE)
 				System.out.println("intput onclickrecoveryshowlist.htm "
 						+ jsOb.toString());
-			SystemLogger.logger.info("intput onclickrecoveryshowlist.htm "
+			SystemLogger.logger.info("[TunerController]:intput onclickrecoveryshowlist.htm "
 					+ jsOb.toString());
 			// ++++++++++++++++++++++++++++
 			return jsOb.toString();
 		} catch (Exception e) {
 			System.out
 					.println("==============  ERROR in getListRecovery or NoData beanRecovery null ===================");
-			SystemLogger.logger.error("ERROR in getListRecovery or NoData beanRecovery null", e);
+			SystemLogger.logger.error("[TunerController]:ERROR in getListRecovery or NoData beanRecovery null", e);
 			return "[]";
 		}
 	}
@@ -687,7 +687,7 @@ public class TunerConfigurationController {
 		String dateTime = jsObject.get("date").getAsString();
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("intput onclickrecovery.htm " + json);
-		SystemLogger.logger.info("intput onclickrecovery.htm " + json);		
+		SystemLogger.logger.info("[TunerController]:intput onclickrecovery.htm " + json);		
 		try {
 			// Step send Config to view
 			JsonArray jaArray = new JsonArray();
@@ -769,17 +769,17 @@ public class TunerConfigurationController {
 
 			} else {
 				System.out.println("No data in Recovery");
-				SystemLogger.logger.error("No data in Recovery");	
+				SystemLogger.logger.error("[TunerController]:No data in Recovery");	
 			}
 			if (true == Main.DEBUG_CONSOLE)
 				System.out.println("output onclickrecovery.htm = "
 						+ jaArray.toString());
-			SystemLogger.logger.info("output onclickrecovery.htm = "
+			SystemLogger.logger.info("[TunerController]:output onclickrecovery.htm = "
 					+ jaArray.toString());	
 			return jaArray.toString();
 		} catch (Exception e) {
 			System.out.println("==============  ERROR in onClick Recovery  ===================");
-			SystemLogger.logger.error("ERROR in onClick Recovery", e);
+			SystemLogger.logger.error("[TunerController]:ERROR in onClick Recovery", e);
 			return "[]";
 		}
 	}

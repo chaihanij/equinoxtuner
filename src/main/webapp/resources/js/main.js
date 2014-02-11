@@ -132,28 +132,18 @@ App.directive('integer', function() {
 		}
 	};
 });
-// Chart flot
-App.directive('chart', function() {
+
+App.directive('datetimez', function() {
 	return {
-		restrict : 'EAC',
-		replace : true,
-		template : '<div align="center"></div>',
-		link : function(scope, elem, attrs) {
-
-			var chart = null, opts = {};
-
-			scope.$watch(attrs.ngModel, function(v) {
-
-				// if (!chart) {
-				//					
-				// chart = $.plot(elem, v, opts);
-				// elem.show();
-				//				
-				// } else {
-				// chart.setData(v);
-				// chart.setupGrid();
-				// chart.draw();
-				// }
+		restrict : 'A',
+		require : 'ngModel',
+		link : function(scope, element, attrs, ngModelCtrl) {
+			element.datetimepicker({
+				language : 'en',
+				pickDate : false,
+			}).on('changeDate', function(e) {
+				ngModelCtrl.$setViewValue(e.date);
+				scope.$apply();
 			});
 		}
 	};

@@ -27,8 +27,7 @@
 <!-- Bootstrap core CSS && JS-->
 <script src="resources/bootstrap/js/bootstrap.js"></script>
 <link href="resources/bootstrap/css/bootstrap.css" rel="stylesheet">
-<link href="resources/bootstrap/css/bootstrap-theme.css"
-	rel="stylesheet">
+<link href="resources/bootstrap/css/bootstrap-theme.css"rel="stylesheet">
 <link href="resources/bootstrap/css/iconbostrap.css" rel="stylesheet" />
 <!-- Custom styles for this template -->
 <link href="resources/css/starter-template.css" rel="stylesheet">
@@ -36,7 +35,6 @@
 <!--  AngulaJS && Module Bootstrap-->
 <script src="resources/js/ui-bootstrap-custom-0.9.0.js"></script>
 <script src="resources/js/ui-bootstrap-custom-tpls-0.9.0.js"></script>
-<!-- $D3 -->
 
 <!-- Just for debugging purposes. Don't actually copy this line! -->
 <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -50,7 +48,7 @@
 </head>
 <body ng-controller="MainCtrl">
 	<!-- navigation bar -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -100,6 +98,6 @@
 	<link href="resources/nvd3/nv.d3.css" rel="stylesheet">
 	<script src="resources/nvd3/d3.v3.js"></script>
 	<script src="resources/nvd3/nv.d3.js"></script>
-	<!-- <script src="resources/nvd3/angularjs-nvd3-directives.js"></script> -->
+	
 </body>
 </html>

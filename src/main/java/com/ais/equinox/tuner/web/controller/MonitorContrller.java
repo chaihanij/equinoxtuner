@@ -1,6 +1,10 @@
 package com.ais.equinox.tuner.web.controller;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ais.equinox.tuner.Main;
 import com.ais.equinox.tuner.SystemLogger;
 import com.ais.equinox.tuner.app.bean.BeanAppConfig;
+import com.ais.equinox.tuner.app.bean.BeanBlockStat;
 import com.ais.equinox.tuner.app.bean.BeanConfig;
 import com.ais.equinox.tuner.app.bean.BeanStatEquinoxAllType;
 import com.ais.equinox.tuner.app.controller.ParserConfigApp;
@@ -33,27 +38,27 @@ import com.google.gson.JsonParser;
 public class MonitorContrller {
 	private BeanAppConfig beanConfig;
 	private HashMap<String, String> NameStatActive = new HashMap<String, String>();
-	
+
 	@RequestMapping(value = "/layout.htm")
 	public String getMonitorPartialPage(ModelMap modelMap) {
 		System.out.println("monitor/layout.htm");
 		return "monitor";
 	}
-	
+
 	@RequestMapping(value = "/getsystemgroupmoniotr.htm", produces = "text/html; charset=utf-8")
 	public @ResponseBody
-	String getSystemGroup(HttpServletRequest request,HttpSession session)  {
-		
-		/*  ++++++++++Get Path File Config +++++++++++*/
-		ServletContext sc = session.getServletContext();	
+	String getSystemGroup(HttpServletRequest request, HttpSession session) {
+
+		/* ++++++++++Get Path File Config +++++++++++ */
+		ServletContext sc = session.getServletContext();
 		String pathFile = sc.getRealPath("/WEB-INF/config.xml");
-		System.out.println("getRealPath : "+pathFile);
+		System.out.println("getRealPath : " + pathFile);
 		ParserConfigApp parser = new ParserConfigApp();
 		beanConfig = parser.parser(pathFile);
-		
-		//set to Static bean
-		BeanConfig.beanConfigApp=beanConfig;
-		
+
+		// set to Static bean
+		BeanConfig.beanConfigApp = beanConfig;
+
 		JsonArray jaSysGroup = new JsonArray();
 
 		try {
@@ -64,7 +69,7 @@ public class MonitorContrller {
 				jaSysGroup.add(jsSysGroup);
 			}
 			if (true == Main.DEBUG_CONSOLE)
-				System.out.println("GetSystemGroup : "+jaSysGroup);
+				System.out.println("GetSystemGroup : " + jaSysGroup);
 			return jaSysGroup.toString();
 		} catch (Exception e) {
 			System.out
@@ -72,12 +77,12 @@ public class MonitorContrller {
 			return jaSysGroup.toString();
 		}
 	}
-	
+
 	@RequestMapping(value = "/selectnodemonitor.htm", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
 	public @ResponseBody
 	String getConfigurationName(@RequestBody final String json,
 			HttpSession session, Principal principal) {
-		
+
 		String text = null;
 		String value = null;
 		if (true == Main.DEBUG_CONSOLE)
@@ -91,76 +96,78 @@ public class MonitorContrller {
 				JsonParser jp = new JsonParser();
 				JsonElement jelement = jp.parse(json);
 				JsonObject jobject = jelement.getAsJsonObject();
-				 text = jobject.get("text").getAsString();
-				 value = jobject.get("value").getAsString();
-				
+				text = jobject.get("text").getAsString();
+				value = jobject.get("value").getAsString();
+
 				/** Get Parameter array Application List **/
 			}
 			/** Retrun array Application List **/
-		
+
 			// Clear Map When Select New Node Connectin
-			if(BeanConfig.beanElement.get(session.getId())!=null){
+			if (BeanConfig.beanElement.get(session.getId()) != null) {
 				BeanConfig.beanElement.get(session.getId()).clear();
 			}
-			
-		
 
-				String host = null;
-				String user = null;
-				String pass = null;
-				for (String[] str : beanConfig.getNodeConnection()) {
-					if (str[0].equals(text)&&str[1].equals(value)) {
-						host = str[1];
-						user = str[2];
-						pass = str[3];
-					}
+			String host = null;
+			String user = null;
+			String pass = null;
+			for (String[] str : beanConfig.getNodeConnection()) {
+				if (str[0].equals(text) && str[1].equals(value)) {
+					host = str[1];
+					user = str[2];
+					pass = str[3];
 				}
-				//Set host user pass to session
-				session.setAttribute("host", host);
-				session.setAttribute("user", user);
-				session.setAttribute("pass", pass);
-				
-				CommandExecute commandEx = new CommandExecute();
+			}
+			// Set host user pass to session
+			session.setAttribute("host", host);
+			session.setAttribute("user", user);
+			session.setAttribute("pass", pass);
+
+			CommandExecute commandEx = new CommandExecute();
 			String[] listStat = null;
-			listStat =	commandEx.getListStatEquinox(text, beanConfig.getPathStatEquinox()+"/", host, user, pass, session.getId());
+			listStat = commandEx.getListStatEquinox(text,
+					beanConfig.getPathStatEquinox() + "/", host, user, pass,
+					session.getId());
 
-				for (String string : listStat) {
-					JsonObject object = new JsonObject();
-					object.addProperty("text", string);
-					object.addProperty("value", string);
-					array.add(object);
-				}
+			for (String string : listStat) {
+				JsonObject object = new JsonObject();
+				object.addProperty("text", string);
+				object.addProperty("value", string);
+				array.add(object);
+			}
 
-				/** Retrun array Application List **/
-			
+			/** Retrun array Application List **/
+
 			if (true == Main.DEBUG_CONSOLE)
 				System.out.println("selectnodemonitor" + array.toString());
-			SystemLogger.logger.info("selectnodemonitor" + array.toString());
+			SystemLogger.logger.info("[MonitorController]:selectnodemonitor"
+					+ array.toString());
 
 			return array.toString();
 
 		} catch (Exception e) {
 			System.out
 					.println("==============  ERROR in selectnodemonitor  ===================");
-			SystemLogger.logger.error("==============  ERROR in selectnodemonitor  ===================");
+			SystemLogger.logger
+					.error("[MonitorController]:==============  ERROR in selectnodemonitor  ===================");
 			return "[]";
 		}
 	}
 
 	// Get Value Stat Equinox
-	
+
 	@RequestMapping(value = "/getstatequinox.htm", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
 	public @ResponseBody
 	String getConfigutionDetail(@RequestBody final String json,
 			HttpSession session, Principal principal) {
 		// input pattern seesion_ID+user+nameStat
-		String  text = null;
+		String text = null;
 		String value = null;
-	
 
 		if (true == Main.DEBUG_CONSOLE)
 			System.out.println("Input getconfigutiondetail" + json);
-			SystemLogger.logger.info("Input getconfigutiondetail");
+		SystemLogger.logger
+				.info("[MonitorController]:Input getconfigutiondetail"+json);
 		try {
 
 			/** Get Parameter array Application List **/
@@ -169,81 +176,200 @@ public class MonitorContrller {
 				JsonParser jp = new JsonParser();
 				JsonElement jelement = jp.parse(json);
 				JsonObject jobject = jelement.getAsJsonObject();
-				 value = jobject.get("value").getAsString();
-				  text = jobject.get("text").getAsString();
-				
+				value = jobject.get("value").getAsString();
+				text = jobject.get("text").getAsString();
+
 				/** Get Parameter array Application List **/
 
 			}
 			/** Retrun array Application List **/
-			
+
 			NameStatActive.put(session.getId(), value);
-			
+
 			// Start Connect Get Stat
-			String host=(String) session.getAttribute("host");
-			String user=(String) session.getAttribute("user");
-			String pass=(String) session.getAttribute("pass");
-			String line ="150";
-			
-			ConnectGetStat connection = new ConnectGetStat(host,user,pass,line,beanConfig.getPathStatEquinox(),text,beanConfig.getStatInterval(),session.getId());	
-			BeanStatEquinoxAllType beanStat=connection.run();
-			
+			String host = (String) session.getAttribute("host");
+			String user = (String) session.getAttribute("user");
+			String pass = (String) session.getAttribute("pass");
+			String line = "150";
+
+			ConnectGetStat connection = new ConnectGetStat(host, user, pass,
+					line, beanConfig.getPathStatEquinox(), text,
+					beanConfig.getStatInterval(), session.getId());
+			BeanStatEquinoxAllType beanStat = connection.run();
+
 			JsonObject jsStatAll = new JsonObject();
-			//Add Time
+			// Add Time
 			jsStatAll.addProperty("time", beanStat.getTime());
-			//Add Internal Stat 
-			
+			// Add Internal Stat
+
 			JsonArray jsArInternalStat = new JsonArray();
-			for (String [] arStr : beanStat.getSystemInternalStat()) {
+			for (String[] arStr : beanStat.getSystemInternalStat()) {
 				JsonObject jsvalue = new JsonObject();
-				jsvalue.addProperty(arStr[0],arStr[1] );
+				jsvalue.addProperty(arStr[0], arStr[1]);
 				jsArInternalStat.add(jsvalue);
-				
+
 			}
 			jsStatAll.add("internalstat", jsArInternalStat);
-			//Add Measurement Stat
+			// Add Measurement Stat
 			JsonArray jsArMeasurement = new JsonArray();
-			
-			for (String [] arStr : beanStat.getSystemMeasurement()) {
+
+			for (String[] arStr : beanStat.getSystemMeasurement()) {
 				JsonObject jsvalue = new JsonObject();
-				jsvalue.addProperty(arStr[0],arStr[1] );
+				jsvalue.addProperty(arStr[0], arStr[1]);
 				jsArMeasurement.add(jsvalue);
 			}
 			jsStatAll.add("measurement", jsArMeasurement);
-			//Add MeasurementValue Stat
+			// Add MeasurementValue Stat
 			JsonArray jsArMeasurementvalue = new JsonArray();
-			
-			for (String [] arStr : beanStat.getSystemMeasurementvalue()) {
+
+			for (String[] arStr : beanStat.getSystemMeasurementvalue()) {
 				JsonObject jsvalue = new JsonObject();
-				jsvalue.addProperty(arStr[0],arStr[1] );
+				jsvalue.addProperty(arStr[0], arStr[1]);
 				jsArMeasurementvalue.add(jsvalue);
 			}
 			jsStatAll.add("measurementvalue", jsArMeasurementvalue);
-			//Add Accumulating Stat
-			
+			// Add Accumulating Stat
+
 			JsonArray jsArAcculating = new JsonArray();
-			for (String [] arStr : beanStat.getAccumulatingCounters()) {
+			for (String[] arStr : beanStat.getAccumulatingCounters()) {
 				JsonObject jsvalue = new JsonObject();
-				jsvalue.addProperty(arStr[0],arStr[1] );
+				jsvalue.addProperty(arStr[0], arStr[1]);
 				jsArAcculating.add(jsvalue);
 			}
 			jsStatAll.add("acculating", jsArAcculating);
-			
-		
-			
-			System.out.println("Output getstatequinox.htm >> "+jsStatAll.toString());
-			SystemLogger.logger.info("Output getstatequinox.htm >> "+jsStatAll.toString());	
-			
+
+			System.out.println("Output getstatequinox.htm >> "
+					+ jsStatAll.toString());
+			SystemLogger.logger
+					.info("[MonitorController]:Output getstatequinox.htm >> "
+							+ jsStatAll.toString());
+
 			return jsStatAll.toString();
 		} catch (Exception e) {
 			System.out
 					.println("==============  ERROR in getstatequinox  ===================");
-			SystemLogger.logger.error("==============  ERROR in getstatequinox  ==================="+e);	
+			SystemLogger.logger
+					.error("[MonitorController]:==============  ERROR in getstatequinox  ==================="
+							+ e);
 			System.err.println(e);
 			return "[]";
 		}
 
 	}
+
+	@RequestMapping(value = "/getstatequinoxretroact.htm", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
+	public @ResponseBody
+	String getConfigutionDetailRetroact(@RequestBody final String json,
+			HttpSession session, Principal principal) {
+		// FileName And Time
+
+		String fileName = null;
+		String time = null;
+		try {
+		if (!json.equals("") && json.length() > 0) {
+
+			JsonParser jp = new JsonParser();
+			JsonElement jelement = jp.parse(json);
+			JsonObject jobject = jelement.getAsJsonObject();
+			fileName = jobject.get("name").getAsString();
+			time = jobject.get("time").getAsString();
+
+			/** Get Parameter array Application List **/
+
+		}
+
+		// Start Connect Get Stat
+		String host = (String) session.getAttribute("host");
+		String user = (String) session.getAttribute("user");
+		String pass = (String) session.getAttribute("pass");
+		String line = "100";
+
+		ConnectGetStat connection = new ConnectGetStat(host, user, pass, line,
+				beanConfig.getPathStatEquinox(), fileName,
+				beanConfig.getStatInterval(), session.getId());
+		
+		Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    String strDate = sdf.format(cal.getTime());
+	    System.out.println("Current date in String Format: "+strDate);
+	    
+		String realTime = strDate+" "+time;
+		ArrayList<BeanBlockStat> beanStat = connection.run2(realTime);
+		// Build json to view
+		JsonArray  jsArrayAllStat = new JsonArray();
+		
+		for (BeanBlockStat beanBlockStat : beanStat) {
+			JsonObject jsStatAll = new JsonObject();
+			System.out.println("+++++++++++++++++  Time : "
+					+ beanBlockStat.getTime() + "  +++++++++++++++++++++++");
+			// Add Time
+			jsStatAll.addProperty("time", beanBlockStat.getTime());
+
+			// Add Internal Stat
+
+			JsonArray jsArInternalStat = new JsonArray();
+			for (String[] data : beanBlockStat.getSystemInternalStat()) {
+				JsonObject jsvalue = new JsonObject();
+				jsvalue.addProperty(data[0], data[1]);
+				jsArInternalStat.add(jsvalue);
+				System.out.println(data[0] + " = " + data[1]);
+			}
+			jsStatAll.add("internalstat", jsArInternalStat);
+			// Add Measurement Stat
+			JsonArray jsArMeasurement = new JsonArray();
+			for (String[] data : beanBlockStat.getAccumulatingCounters()) {
+				JsonObject jsvalue = new JsonObject();
+				jsvalue.addProperty(data[0], data[1]);
+				jsArMeasurement.add(jsvalue);
+				System.out.println(data[0] + " = " + data[1]);
+			}
+			jsStatAll.add("measurement", jsArMeasurement);
+			// Add MeasurementValue Stat
+			JsonArray jsArMeasurementvalue = new JsonArray();
+			for (String[] data : beanBlockStat.getSystemMeasurement()) {
+				JsonObject jsvalue = new JsonObject();
+				jsvalue.addProperty(data[0], data[1]);
+				jsArMeasurementvalue.add(jsvalue);
+				System.out.println(data[0] + " = " + data[1]);
+			}
+			jsStatAll.add("measurementvalue", jsArMeasurementvalue);
+			// Add Accumulating Stat
+
+			JsonArray jsArAcculating = new JsonArray();
+			for (String[] data : beanBlockStat.getSystemMeasurementvalue()) {
+				JsonObject jsvalue = new JsonObject();
+				jsvalue.addProperty(data[0], data[1]);
+				jsArAcculating.add(jsvalue);
+				System.out.println(data[0] + " = " + data[1]);
+			}
+			jsStatAll.add("acculating", jsArAcculating);
+			//Add Object to Array
+			jsArrayAllStat.add(jsStatAll);
+			
+			
+
+		}
+		
+		System.out.println("Output getstatequinox.htm >> "
+				+ jsArrayAllStat.toString());
+		SystemLogger.logger
+		.info("[MonitorController]:Output getstatequinox.htm >> "
+				+ jsArrayAllStat.toString());
 	
-	
+		
+
+
+		return jsArrayAllStat.toString();
+	} catch (Exception e) {
+		System.out
+				.println("==============  ERROR in getstatequinox  ===================");
+		SystemLogger.logger
+				.error("[MonitorController]:==============  ERROR in getstatequinoxretroact  ==================="
+						+ e);
+		System.err.println(e);
+		return "[]";
+	}
+
+	}
+
 }
